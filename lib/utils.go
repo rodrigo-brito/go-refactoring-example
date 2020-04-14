@@ -2,25 +2,36 @@ package lib
 
 import "time"
 
-type Validator struct {}
+type validator struct {}
+
+type Validator interface {
+	IsValidDate(date time.Time) bool
+	IsValidNotes(note float64) bool
+	IsValidCash(value float64) bool
+	IsValidYear(year int) bool
+}
+
+func NewValidator() Validator {
+	return new(validator)
+}
 
 type TimeValidate interface {
 	IsValidDate(date time.Time) bool
 }
 
-func (Validator) IsValidDate(date time.Time) bool {
+func (validator) IsValidDate(date time.Time) bool {
 	today := time.Now()
 	return date.After(today)
 }
 
-func (Validator) IsValidNotes(note float64) bool {
+func (validator) IsValidNotes(note float64) bool {
 	return note >= 0 && note <= 100
 }
 
-func (Validator) IsValidCash(value float64) bool {
+func (validator) IsValidCash(value float64) bool {
 	return value > 0
 }
 
-func  (Validator) IsValidYear(year int) bool {
+func  (validator) IsValidYear(year int) bool {
 	return year > 1900 && year <=time.Now().Year()
 }

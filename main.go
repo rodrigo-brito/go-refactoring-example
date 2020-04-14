@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	validator := new(lib.Validator)
+	validator := lib.NewValidator()
 	fmt.Println("Valid 10 = ", validator.IsValidCash(10))
 	fmt.Println("Valid -1 = ", validator.IsValidCash(-1))
 	fmt.Println("Valid 0 = ", validator.IsValidCash(0))
