@@ -39,10 +39,14 @@ func  (validator) IsValidYear(year int) bool {
 	return year > 1900 && year <=time.Now().Year()
 }
 
-func PrintType(value int) {
+func printType(value int)  {
 	if (value % 2 == 0) {
 		fmt.Println("Odd")
 	} else {
 		fmt.Println("even")
 	}
+}
+
+func PrintType(value int) {
+	printType(value)
 }
