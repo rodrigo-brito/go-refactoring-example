@@ -1,6 +1,9 @@
 package lib
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type validator struct {}
 
@@ -34,4 +37,12 @@ func (validator) IsValidCash(value float64) bool {
 
 func  (validator) IsValidYear(year int) bool {
 	return year > 1900 && year <=time.Now().Year()
+}
+
+func PrintType(value int) {
+	if (value % 2 == 0) {
+		fmt.Println("Odd")
+	} else {
+		fmt.Println("even")
+	}
 }
