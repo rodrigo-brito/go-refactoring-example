@@ -5,12 +5,10 @@ import (
 	"time"
 )
 
-type validator struct {}
+type validator struct{}
 
 type Validator interface {
 	IsValidDate(date time.Time) bool
-	IsValidNotes(note int) bool
-	IsValidCash(value float64) bool
 }
 
 func NewValidator() Validator {
@@ -22,7 +20,7 @@ type TimeValidate interface {
 }
 
 func IsValidYear(year int) bool {
-	return year > 1900 && year <=time.Now().Year()
+	return year > 1900 && year <= time.Now().Year()
 }
 
 func (validator) IsValidDate(date time.Time) bool {
@@ -30,18 +28,14 @@ func (validator) IsValidDate(date time.Time) bool {
 	return date.After(today)
 }
 
-func (validator) IsValidNotes(note int) bool {
-	return note >= 0 && note <= 100
-}
-
-func (validator) IsValidCash(value float64) bool {
-	return value > 0
-}
-
-func PrintType(value int) {
-	if (value % 2 == 0) {
+func isEven(value int) {
+	if value%2 == 0 {
 		fmt.Println("Odd")
 	} else {
 		fmt.Println("even")
 	}
+}
+
+func PrintType(value int) {
+	isEven(value)
 }
