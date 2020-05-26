@@ -43,19 +43,14 @@ func PrintType(value int) {
 	isEven(value)
 }
 
-func ValidateCPF(cpf string) error {
-	cpf = strings.Replace(cpf, ".", "", -1)
-	cpf = strings.Replace(cpf, "-", "", -1)
-	if len(cpf) != 11 {
-		return errors.New("CPF inválido")
-	}
+func validateDigits(cpf string) error {
 	var eq bool
-	var dig string
+	var digits string
 	for _, val := range cpf {
-		if len(dig) == 0 {
-			dig = string(val)
+		if len(digits) == 0 {
+			digits = string(val)
 		}
-		if string(val) == dig {
+		if string(val) == digits {
 			eq = true
 			continue
 		}
@@ -64,6 +59,20 @@ func ValidateCPF(cpf string) error {
 	}
 	if eq {
 		return errors.New("CPF inválido")
+	}
+	return nil
+}
+
+func ValidateCPF(cpf string) error {
+	cpf = strings.Replace(cpf, ".", "", -1)
+	cpf = strings.Replace(cpf, "-", "", -1)
+	if len(cpf) != 11 {
+		return errors.New("CPF inválido")
+	}
+
+	err := validateDigits(cpf)
+	if err != nil {
+		return err
 	}
 
 	i := 10
@@ -98,6 +107,65 @@ func ValidateCPF(cpf string) error {
 	digit2, _ := strconv.Atoi(string(cpf[10]))
 	if mod != digit2 {
 		return errors.New("CPF inválido")
+	}
+
+	return nil
+}
+
+func ValidateCNPJ(cnpj string) error {
+	cnpj = strings.Replace(cnpj, ".", "", -1)
+	cnpj = strings.Replace(cnpj, "-", "", -1)
+	cnpj = strings.Replace(cnpj, "/", "", -1)
+	if len(cnpj) != 14 {
+		return errors.New("invalid CNPJ")
+	}
+
+	algs := []int{5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2}
+	var algProdCpfDig1 = make([]int, 12, 12)
+	for key, val := range algs {
+		intParsed, _ := strconv.Atoi(string(cnpj[key]))
+		tmp := val * intParsed
+		algProdCpfDig1[key] = tmp
+	}
+	sum := 0
+	for _, val := range algProdCpfDig1 {
+		sum += val
+	}
+	digit1 := sum % 11
+	if digit1 < 2 {
+		digit1 = 0
+	} else {
+		digit1 = 11 - digit1
+	}
+
+	char12, _ := strconv.Atoi(string(cnpj[12]))
+	if char12 != digit1 {
+		return errors.New("invalid CPNJ")
+	}
+	algs = append([]int{6}, algs...)
+
+	var algProdCpfDig2 = make([]int, 13, 13)
+	for key, val := range algs {
+		intParsed, _ := strconv.Atoi(string(cnpj[key]))
+
+		tmp := val * intParsed
+		algProdCpfDig2[key] = tmp
+	}
+	sum = 0
+	for _, val := range algProdCpfDig2 {
+		sum += val
+	}
+
+	digit2 := sum % 11
+	if digit2 < 2 {
+		digit2 = 0
+	} else {
+		digit2 = 11 - digit2
+	}
+
+	char13, _ := strconv.Atoi(string(cnpj[13]))
+	if char13 != digit2 {
+		return errors.New("invalid CNPJ")
 	}
 
 	return nil
